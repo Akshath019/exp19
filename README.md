@@ -186,17 +186,18 @@ docker push yourusername/java-app:v1
 ```bash
 docker run -d -p 8080:80 nginx
 docker volume create myvolume
-
 docker run -it -v myvolume:/data ubuntu bash
-echo "Hello from Docker Volume" > /data/test.txt
-
+cd /data
+echo "Hello from Docker Volume" > test.txt
+exit
 docker run -it -v myvolume:/data ubuntu bash
 cat /data/test.txt
-
+exit
 docker run -d -p 8081:80 -v myvolume:/usr/share/nginx/html nginx
 docker run -it -v myvolume:/usr/share/nginx/html ubuntu bash
 echo "<h1>Docker Volume Working</h1>" > /usr/share/nginx/html/index.html
 exit
+
 ```
 
 ---
