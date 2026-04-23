@@ -194,6 +194,9 @@ docker run -it -v myvolume:/data ubuntu bash
 cat /data/test.txt
 
 docker run -d -p 8081:80 -v myvolume:/usr/share/nginx/html nginx
+docker run -it -v myvolume:/usr/share/nginx/html ubuntu bash
+echo "<h1>Docker Volume Working</h1>" > /usr/share/nginx/html/index.html
+exit
 ```
 
 ---
