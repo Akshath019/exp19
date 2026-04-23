@@ -1,14 +1,21 @@
-20)
+# 🚀 DevOps Experiments (16–20)
+
+---
+
+## 🔹 Experiment 20: CI/CD Pipeline
+
+### 📌 Steps
+
+```bash
 mvn archetype:generate
-
-maven-archetype-webapp
-
 GroupId: com.example
 ArtifactId: cicd-demo
 cd cicd-demo
+```
 
-Update pom.xml
+### 📦 Dependencies (pom.xml)
 
+```xml
 <dependencies>
   <dependency>
     <groupId>javax.servlet</groupId>
@@ -24,11 +31,13 @@ Update pom.xml
     <scope>test</scope>
   </dependency>
 </dependencies>
+```
 
+---
 
-mkdir -p src/main/java/com/example
+### ☕ HelloServlet.java
 
-HelloServlet.java
+```java
 package com.example;
 
 import java.io.*;
@@ -43,10 +52,13 @@ public class HelloServlet extends HttpServlet {
         res.getWriter().println("<h1>CI/CD Working</h1>");
     }
 }
+```
 
+---
 
-update web.xml
+### ⚙️ web.xml
 
+```xml
 <servlet>
   <servlet-name>Hello</servlet-name>
   <servlet-class>com.example.HelloServlet</servlet-class>
@@ -56,13 +68,13 @@ update web.xml
   <servlet-name>Hello</servlet-name>
   <url-pattern>/hello</url-pattern>
 </servlet-mapping>
+```
 
+---
 
-create test 
+### 🧪 Test Case
 
-mkdir -p src/test/java/com/example
-
-TestSample.java
+```java
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -72,19 +84,32 @@ class TestSample {
         assertEquals(2, 1 + 1);
     }
 }
+```
 
-mvn clean package
+---
 
-Dockerfile
+### 🐳 Dockerfile
 
+```dockerfile
 FROM tomcat:9-jdk17
 COPY target/*.war /usr/local/tomcat/webapps/ROOT.war
+```
 
+---
 
-test:
+### ▶️ Run Commands
+
+```bash
+mvn clean package
 docker build -t cicd-app .
 docker run -d -p 8087:8080 cicd-app
+```
 
+---
+
+### ⚙️ Jenkins Pipeline
+
+```groovy
 pipeline {
     agent any
 
@@ -102,33 +127,20 @@ pipeline {
             }
         }
     }
-    post{
-	always{
-		junit '**/target/surefire-reports/*.xml'	
-	}	
-	
- }
+
+    post {
+        always {
+            junit '**/target/surefire-reports/*.xml'
+        }
+    }
 }
+```
 
+---
 
+## 🔹 Experiment 19: Jenkins + Docker
 
-
-18
-Dockerfile
-FROM eclipse-temurin:17-jdk
-WORKDIR /app
-COPY . /app
-RUN javac Grade.java
-CMD ["java", "Grade"]
-
-docker build -t java-app .
-docker images
-docker login
-docker tag java-app yourusername/java-app:v1
-docker push yourusername/java-app:v1
-
-
-19 
+```groovy
 pipeline {
     agent any
 
@@ -146,25 +158,49 @@ pipeline {
         }
     }
 }
+```
 
-17
+---
+
+## 🔹 Experiment 18: Docker Hub Push
+
+```dockerfile
+FROM eclipse-temurin:17-jdk
+WORKDIR /app
+COPY . /app
+RUN javac Grade.java
+CMD ["java", "Grade"]
+```
+
+```bash
+docker build -t java-app .
+docker login
+docker tag java-app yourusername/java-app:v1
+docker push yourusername/java-app:v1
+```
+
+---
+
+## 🔹 Experiment 17: Docker Volume
+
+```bash
 docker run -d -p 8080:80 nginx
 docker volume create myvolume
+
 docker run -it -v myvolume:/data ubuntu bash
-cd /data
-echo "Hello from Docker Volume" > test.txt
-exit
+echo "Hello from Docker Volume" > /data/test.txt
+
 docker run -it -v myvolume:/data ubuntu bash
 cat /data/test.txt
-exit
+
 docker run -d -p 8081:80 -v myvolume:/usr/share/nginx/html nginx
-docker run -it -v myvolume:/usr/share/nginx/html ubuntu bash
-echo "<h1>Docker Volume Working</h1>" > /usr/share/nginx/html/index.html
-exit
+```
 
+---
 
-EXP 16
+## 🔹 Experiment 16: Python Docker App
 
+```python
 from http.server import SimpleHTTPRequestHandler, HTTPServer
 
 PORT = 5020
@@ -177,25 +213,27 @@ class MyHandler(SimpleHTTPRequestHandler):
         self.wfile.write(b"<h1>Hello from Docker Python Container</h1>")
 
 server = HTTPServer(("0.0.0.0", PORT), MyHandler)
-print(f"Server running on port {PORT}...")
 server.serve_forever()
+```
 
-
+```dockerfile
 FROM python:3.9-slim
 WORKDIR /app
 COPY app.py .
 EXPOSE 5020
 CMD ["python", "app.py"]
+```
 
-
+```bash
 docker build -t my-python-app .
-docker images
 docker run -d -p 5020:5020 my-python-app
+```
 
+---
 
+## 🔹 Experiment 14: JaCoCo
 
-exp 14
-
+```xml
 <build>
     <plugins>
 
@@ -223,3 +261,7 @@ exp 14
 
     </plugins>
 </build>
+```
+
+---
+	
